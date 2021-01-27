@@ -1,6 +1,6 @@
 import React, { useState, useReducer } from 'react';
 
-import titleReducer, { SET_TITLE } from '../reducers/titleReducer';
+import titleReducer, { SET_TITLE, TOGGLE_EDITING } from '../reducers/titleReducer';
 
 const initialState = {
   title: 'title from reducer',
@@ -9,13 +9,13 @@ const initialState = {
 
 const Title = () => {
   const [state, dispatch] = useReducer(titleReducer, initialState)
-  const title = state.title
+  const { title, editing } = state
   // application level state
   // const [title, setTitle] = useState('Hello earthlings!');
-  const [editing, setEditing] = useState(false);
+  // const [editing, setEditing] = useState(false);
 
   // component level state
-  const [newTitleText, setNewTitleText] = useState('');
+  const [newTitleText, setNewTitleText] = useState(title);
 
   const handleChanges = e => {
     setNewTitleText(e.target.value);
@@ -26,7 +26,10 @@ const Title = () => {
       {!editing ? (
         <h1>
           {title}{' '}
-          <i onClick={() => setEditing(!editing)} className="far fa-edit" />
+          <i onClick={() => {
+            //setEditing(!editing)
+            dispatch({ type: TOGGLE_EDITING })
+          }} className="far fa-edit" />
         </h1>
       ) : (
           <div>
@@ -42,7 +45,8 @@ const Title = () => {
                 //setTitle(newTitleText);
                 // TODO: dispatch an action to set the title
                 dispatch({ type: SET_TITLE, payload: newTitleText })
-                setEditing(false);
+                // dispatch({ type: TOGGLE_EDITING })
+                // setEditing(false);
               }}
             >
               Update title
